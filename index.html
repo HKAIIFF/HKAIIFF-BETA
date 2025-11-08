@@ -3914,8 +3914,16 @@
         const fingerprintLayer = document.getElementById('fingerprint-layer');
 
         // 顯示正常內容(用戶活動時)
-        function showNormalContent() {
+        function showNormalContent(event) {
             if (isInteractionLocked) return; // 如果已經進入數據收集,不再響應
+            
+            // 如果觸摸事件來自指紋圖標或其子元素,不執行隱藏
+            if (event && event.target) {
+                const fingerprintIcon = document.querySelector('.fingerprint-icon');
+                if (fingerprintIcon && (fingerprintIcon.contains(event.target) || event.target === fingerprintIcon)) {
+                    return; // 不執行隱藏,讓點擊事件正常觸發
+                }
+            }
             
             clearTimeout(inactivityTimer);
             
