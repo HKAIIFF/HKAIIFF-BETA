@@ -60,6 +60,13 @@
             background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: brightness(1.2);
         }
 
         .top-bar-right {
@@ -609,7 +616,7 @@
 
     <!-- 頂部欄 -->
     <div class="top-bar">
-        <div class="logo">HKAIIFF</div>
+        <div class="logo" onclick="goToHome()">HKAIIFF</div>
         <div class="top-bar-right">
             <button class="lang-toggle-btn" id="langToggle" title="Switch Language / 切換語言">
                 🇬🇧
@@ -1373,11 +1380,18 @@
         // ============================================
         // 功能按鈕事件
         // ============================================
+        function goToHome() {
+            // 點擊logo跳轉到首頁
+            window.location.href = 'index.html';
+        }
+
         function logout() {
             const msg = isEnglish ? 
                 '👋 Logging out...\n\nThank you for using HKAIIFF!' :
                 '👋 正在登出...\n\n感謝您使用HKAIIFF!';
             alert(msg);
+            // 跳轉到首頁
+            window.location.href = 'index.html';
         }
 
         function viewWorks() {
