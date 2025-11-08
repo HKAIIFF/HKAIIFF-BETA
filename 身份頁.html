@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKAIIFF - The Genesis | 創世紀</title>
+    <meta name="description" content="Create your HKAIIFF ecosystem passport and enter the new world of AI and Web3">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #8e44ad;
+            --accent: #00ff9d;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #0a0a0a;
+            color: #ffffff;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(52, 152, 219, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(142, 68, 173, 0.1) 0%, transparent 20%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-font {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            text-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes logoGlow {
+            0% { text-shadow: 0 0 10px rgba(0, 255, 157, 0.3); }
+            100% { text-shadow: 0 0 25px rgba(0, 255, 157, 0.6), 0 0 35px rgba(52, 152, 219, 0.4); }
+        }
+        
+        .logo-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.8;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .navbar {
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        
+        /* 语言切换按钮样式 - 来自HKAIIFF_Interactive_Fixed.html */
+        .lang-toggle {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(26, 32, 44, 0.5);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 25px;
+            padding: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-toggle:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+        }
+        
+        .lang-option {
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .lang-option.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold), #ffed4e);
+            color: #000;
+            transition: all 0.3s ease;
+            border: none;
+            font-weight: 600;
+        }
+        
+        .btn-gold:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+        }
+        
+        .hero {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-top: 80px;
+            flex: 1;
+        }
+        
+        .hero:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1635805737707-575885ab0820?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.8;
+            animation: bgPan 30s infinite linear;
+        }
+        
+        @keyframes bgPan {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+        
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: sparkle 2s linear infinite;
+        }
+        
+        @keyframes sparkle {
+            0% { opacity: 0; transform: scale(0) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1) rotate(180deg); }
+            100% { opacity: 0; transform: scale(0) rotate(360deg); }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        /* Genesis Page Specific Styles */
+        .orb-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 40px;
+            perspective: 1000px;
+        }
+        
+        .orb {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--secondary));
+            box-shadow: 
+                0 0 60px rgba(52, 152, 219, 0.5),
+                0 0 100px rgba(142, 68, 173, 0.3),
+                inset 0 0 60px rgba(255, 255, 255, 0.1);
+            transform-style: preserve-3d;
+            animation: orbRotate 20s infinite linear;
+        }
+        
+        @keyframes orbRotate {
+            0% { transform: rotateY(0deg) rotateX(10deg); }
+            100% { transform: rotateY(360deg) rotateX(10deg); }
+        }
+        
+        .orb-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100px;
+            height: 100px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .login-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+        
+        .login-btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.4);
+        }
+        
+        .login-btn-secondary {
+            background: rgba(26, 32, 44, 0.7);
+            color: #fff;
+            border: 2px solid var(--accent);
+        }
+        
+        .login-btn-secondary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.3);
+            border-color: var(--accent);
+            background: rgba(26, 32, 44, 0.9);
+        }
+        
+        .login-btn i {
+            font-size: 20px;
+        }
+        
+        .minting-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 10000;
+        }
+        
+        .minting-animation.active {
+            display: flex;
+        }
+        
+        .minting-text {
+            margin-top: 40px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* 返回按钮样式 */
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 12px 30px;
+            background: rgba(26, 32, 44, 0.8);
+            border: 2px solid rgba(0, 255, 157, 0.3);
+            border-radius: 30px;
+            color: var(--accent);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-button:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 255, 157, 0.3);
+            border-color: var(--accent);
+            background: rgba(26, 32, 44, 0.95);
+        }
+        
+        .back-button i {
+            margin-right: 8px;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .orb-container {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .login-btn {
+                font-size: 14px;
+                padding: 16px 30px;
+            }
+            
+            .back-button {
+                bottom: 20px;
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar - 简化版,使用HKAIIFF_Interactive_Fixed.html的样式 -->
+    <nav class="navbar">
+        <div class="container mx-auto px-4 flex items-center justify-between" style="height: 80px;">
+            <!-- Logo -->
+            <div class="flex items-center space-x-4">
+                <div>
+                    <div class="logo-font text-2xl">HKAIIFF</div>
+                    <div class="logo-sub text-xs">AI FILM FEST</div>
+                </div>
+            </div>
+            
+            <!-- Language Toggle - 使用HKAIIFF_Interactive_Fixed.html的样式 -->
+            <div class="lang-toggle" onclick="toggleLanguage()">
+                <div class="lang-option lang-en active">EN</div>
+                <div class="lang-option lang-zh">繁中</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        
+        <div class="hero-content">
+            <!-- Title -->
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text lang-en">
+                The Genesis
+            </h1>
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 gradient-text lang-zh" style="display: none;">
+                創世紀
+            </h1>
+            
+            <h2 class="text-2xl md:text-3xl text-accent font-semibold mb-8 lang-en">
+                A New World Begins.
+            </h2>
+            <h2 class="text-2xl md:text-3xl text-accent font-semibold mb-8 lang-zh" style="display: none;">
+                新世界就此開啟。
+            </h2>
+            
+            <!-- Orb -->
+            <div class="orb-container">
+                <div class="orb">
+                    <div class="orb-inner">
+                        <i class="fas fa-fingerprint text-4xl text-accent"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Description -->
+            <div class="mb-10 max-w-2xl mx-auto">
+                <p class="text-lg text-gray-300 mb-4 lang-en">
+                    This is not just logging in.
+                </p>
+                <p class="text-lg text-gray-300 mb-4 lang-en">
+                    This is your <strong class="text-accent">permanent identity</strong> in the HKAIIFF AI and Web3 universe.
+                </p>
+                <p class="text-lg text-gray-300 lang-en">
+                    Your "passport" will securely store your <strong class="text-accent">assets</strong> (AIF tokens), your <strong class="text-accent">honors</strong> (NFT trophies), and your <strong class="text-accent">interactive memories</strong> with the AI world.
+                </p>
+                
+                <p class="text-lg text-gray-300 mb-4 lang-zh" style="display: none;">
+                    這不僅是登入。
+                </p>
+                <p class="text-lg text-gray-300 mb-4 lang-zh" style="display: none;">
+                    這是您在 HKAIIFF AI 與 Web3 宇宙中的<strong class="text-accent">永久身份</strong>。
+                </p>
+                <p class="text-lg text-gray-300 lang-zh" style="display: none;">
+                    您的「護照」將安全地儲存您的<strong class="text-accent">資產</strong> (AIF 代幣)、您的<strong class="text-accent">榮譽</strong> (NFT 獎杯)、以及您與 AI 世界的<strong class="text-accent">交互記憶</strong>。
+                </p>
+            </div>
+            
+            <!-- Prompt -->
+            <p class="text-lg text-gray-400 mb-8 lang-en">
+                Please choose your key.
+            </p>
+            <p class="text-lg text-gray-400 mb-8 lang-zh" style="display: none;">
+                請選擇您的鑰匙。
+            </p>
+            
+            <!-- Login Options -->
+            <div class="login-options">
+                <!-- Option A - Primary -->
+                <button class="login-btn login-btn-primary" id="web2Login">
+                    <i class="fab fa-google"></i>
+                    <i class="fab fa-apple"></i>
+                    <i class="fas fa-envelope"></i>
+                    <span class="lang-en">Continue with Email / Google / Apple</span>
+                    <span class="lang-zh" style="display: none;">使用 郵箱 / Google / Apple 帳戶繼續</span>
+                </button>
+                <p class="text-sm text-gray-400 text-center -mt-2 lang-en">
+                    (We will instantly and securely create a Web3 passport for you)
+                </p>
+                <p class="text-sm text-gray-400 text-center -mt-2 lang-zh" style="display: none;">
+                    （我們將為您即時、安全地創建一個 Web3 護照）
+                </p>
+                
+                <!-- Option B - Secondary -->
+                <button class="login-btn login-btn-secondary" id="web3Login">
+                    <i class="fab fa-ethereum"></i>
+                    <span class="lang-en">Connect Your Existing Wallet</span>
+                    <span class="lang-zh" style="display: none;">連接您現有的錢包</span>
+                </button>
+                <p class="text-sm text-gray-400 text-center -mt-2 lang-en">
+                    (For experienced users with MetaMask, Coinbase Wallet, etc.)
+                </p>
+                <p class="text-sm text-gray-400 text-center -mt-2 lang-zh" style="display: none;">
+                    （適合 MetaMask, Coinbase Wallet 等資深用戶）
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 返回上一页按钮 -->
+    <button class="back-button" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        <span class="lang-en">Back to Previous Page</span>
+        <span class="lang-zh" style="display: none;">返回上一頁</span>
+    </button>
+
+    <!-- Minting Animation Overlay -->
+    <div class="minting-animation" id="mintingAnimation">
+        <div class="orb-container">
+            <div class="orb" style="animation-duration: 5s; animation-timing-function: ease-in-out;">
+                <div class="orb-inner">
+                    <i class="fas fa-fingerprint text-4xl text-accent"></i>
+                </div>
+            </div>
+        </div>
+        <div class="minting-text lang-en">Minting Your Ecosystem Passport...</div>
+        <div class="minting-text lang-zh" style="display: none;">正在鑄造您的生態護照...</div>
+    </div>
+
+    <script>
+        // Language toggle function - 使用HKAIIFF_Interactive_Fixed.html的逻辑
+        function toggleLanguage() {
+            const body = document.body;
+            const isZh = body.classList.contains('zh-active');
+            
+            if (isZh) {
+                // 切换到英文
+                body.classList.remove('zh-active');
+                document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'block');
+                document.querySelector('.lang-en').classList.add('active');
+                document.querySelector('.lang-zh').classList.remove('active');
+                document.querySelector('html').setAttribute('lang', 'en');
+            } else {
+                // 切换到中文
+                body.classList.add('zh-active');
+                document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'block');
+                document.querySelector('.lang-zh').classList.add('active');
+                document.querySelector('.lang-en').classList.remove('active');
+                document.querySelector('html').setAttribute('lang', 'zh-Hant');
+            }
+        }
+
+        // Minting animation
+        const web2Login = document.getElementById('web2Login');
+        const web3Login = document.getElementById('web3Login');
+        const mintingAnimation = document.getElementById('mintingAnimation');
+        
+        function startMintingAnimation() {
+            // Fade out all content
+            document.querySelector('.hero-content').style.opacity = '0';
+            document.querySelector('.hero-content').style.transition = 'opacity 0.5s ease';
+            
+            // Show minting animation
+            setTimeout(() => {
+                mintingAnimation.classList.add('active');
+                
+                // After animation, redirect to next page
+                setTimeout(() => {
+                    // In a real implementation, this would redirect to the next page
+                    window.location.href = '角色頁.html';
+                    
+                    // For demo purposes, we'll just show an alert
+                    const isZh = document.body.classList.contains('zh-active');
+
+                    
+                    // Reset for demo purposes
+
+                }, 3000); // Animation duration
+            }, 500);
+        }
+        
+        web2Login.addEventListener('click', startMintingAnimation);
+        web3Login.addEventListener('click', startMintingAnimation);
+
+        // Back button function
+        function goBack() {
+            // 在实际应用中,这将返回到上一个页面
+            // window.history.back();
+            
+            // 或者返回到主页
+            // window.location.href = 'index.html';
+            
+            // Demo purposes - 显示提示
+            const isZh = document.body.classList.contains('zh-active');
+            const msg = isZh ? 
+                '在實際應用中,這將返回到上一個頁面' :
+                'In a real implementation, this would go back to the previous page';
+            alert(msg);
+        }
+
+        // Add CSS animation for data streams
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes dataStream {
+                0% { transform: translateY(-100vh); }
+                100% { transform: translateY(100vh); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

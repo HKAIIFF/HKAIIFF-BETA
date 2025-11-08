@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HKAIIFF - 選擇您的身份</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Creator Colors */
+            --creator-bg: #1a2332;
+            --creator-primary: #3498db;
+            --creator-accent: #5dade2;
+            
+            /* Explorer Colors */
+            --explorer-bg: #2c1a42;
+            --explorer-primary: #8e44ad;
+            --explorer-accent: #af7ac5;
+            
+            /* Citizen Colors */
+            --citizen-bg: #3d3410;
+            --citizen-primary: #ffd700;
+            --citizen-accent: #ffed4e;
+            
+            /* Global */
+            --accent: #00ff9d;
+            --text-light: #ffffff;
+            --transition-speed: 0.6s;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            overflow: hidden;
+            background-color: #0a0a0a;
+        }
+        
+        /* Logo and Language Toggle (Fixed at top) */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 80px;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 157, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 3rem;
+            z-index: 2000;
+        }
+        
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .logo-font {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            letter-spacing: 3px;
+            font-size: 2rem;
+            background: linear-gradient(90deg, var(--creator-primary), var(--accent), var(--explorer-primary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes logoGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3); }
+        }
+        
+        .logo-sub {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--accent);
+            opacity: 0.8;
+            font-size: 0.65rem;
+            margin-top: 0.2rem;
+        }
+        
+        .language-toggle {
+            background: linear-gradient(135deg, var(--creator-primary), var(--explorer-primary));
+            border: 2px solid rgba(0, 255, 157, 0.3);
+            border-radius: 50px;
+            padding: 0.6rem 1.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-weight: 600;
+            color: white;
+            font-size: 0.95rem;
+        }
+        
+        .language-toggle:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
+            border-color: var(--accent);
+        }
+        
+        /* Identity Selector */
+        .identity-selector {
+            position: fixed;
+            top: 80px;
+            left: 0;
+            width: 100vw;
+            height: calc(100vh - 80px);
+            display: flex;
+            z-index: 1000;
+        }
+        
+        .identity-section {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: flex var(--transition-speed) ease-in-out;
+            padding: 2rem;
+        }
+        
+        .identity-section:hover {
+            flex: 1.8;
+        }
+        
+        .identity-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.05), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .identity-section:hover::before {
+            opacity: 1;
+        }
+        
+        /* Creator Section */
+        .creator-section {
+            background: linear-gradient(135deg, var(--creator-bg), #0d1621);
+            border-right: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        /* Explorer Section */
+        .explorer-section {
+            background: linear-gradient(135deg, var(--explorer-bg), #1a0d2e);
+            border-right: 1px solid rgba(142, 68, 173, 0.2);
+        }
+        
+        /* Citizen Section */
+        .citizen-section {
+            background: linear-gradient(135deg, var(--citizen-bg), #2b2308);
+        }
+        
+        /* Background Pattern */
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            pointer-events: none;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, currentColor 35px, currentColor 36px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, currentColor 35px, currentColor 36px);
+        }
+        
+        /* Content */
+        .identity-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 500px;
+            transition: transform 0.3s ease;
+        }
+        
+        .identity-section:hover .identity-content {
+            transform: translateY(-10px);
+        }
+        
+        .identity-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+        }
+        
+        .identity-section:hover .identity-icon {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+        
+        .creator-section .identity-icon {
+            color: var(--creator-accent);
+        }
+        
+        .explorer-section .identity-icon {
+            color: var(--explorer-accent);
+        }
+        
+        .citizen-section .identity-icon {
+            color: var(--citizen-accent);
+        }
+        
+        .identity-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+        }
+        
+        .identity-subtitle {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        
+        .creator-section .identity-subtitle {
+            color: var(--creator-accent);
+        }
+        
+        .explorer-section .identity-subtitle {
+            color: var(--explorer-accent);
+        }
+        
+        .citizen-section .identity-subtitle {
+            color: var(--citizen-accent);
+        }
+        
+        .identity-description {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            color: rgba(255, 255, 255, 0.85);
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s;
+        }
+        
+        .identity-section:hover .identity-description {
+            opacity: 1;
+        }
+        
+        .identity-features {
+            text-align: left;
+            margin-bottom: 2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.2s;
+        }
+        
+        .identity-section:hover .identity-features {
+            opacity: 1;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .feature-icon {
+            margin-right: 0.8rem;
+            font-size: 1.1rem;
+        }
+        
+        .creator-section .feature-icon {
+            color: var(--creator-accent);
+        }
+        
+        .explorer-section .feature-icon {
+            color: var(--explorer-accent);
+        }
+        
+        .citizen-section .feature-icon {
+            color: var(--citizen-accent);
+        }
+        
+        .identity-btn {
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.15rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            color: white;
+            opacity: 0;
+            transition: all 0.3s ease 0.3s;
+        }
+        
+        .identity-section:hover .identity-btn {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .creator-btn {
+            background: linear-gradient(135deg, var(--creator-primary), var(--creator-accent));
+        }
+        
+        .creator-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.5);
+        }
+        
+        .explorer-btn {
+            background: linear-gradient(135deg, var(--explorer-primary), var(--explorer-accent));
+        }
+        
+        .explorer-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(142, 68, 173, 0.5);
+        }
+        
+        .citizen-btn {
+            background: linear-gradient(135deg, var(--citizen-primary), var(--citizen-accent));
+            color: #000;
+        }
+        
+        .citizen-btn:hover {
+            transform: scale(1.08) translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.5);
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: currentColor;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 8s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            25% { transform: translateY(-30px) translateX(20px); }
+            50% { transform: translateY(-60px) translateX(-20px); }
+            75% { transform: translateY(-30px) translateX(20px); }
+        }
+        
+        .particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 40%; left: 60%; animation-delay: 2s; }
+        .particle:nth-child(3) { top: 60%; left: 30%; animation-delay: 4s; }
+        .particle:nth-child(4) { top: 80%; left: 70%; animation-delay: 6s; }
+        .particle:nth-child(5) { top: 30%; left: 80%; animation-delay: 1s; }
+        .particle:nth-child(6) { top: 70%; left: 50%; animation-delay: 3s; }
+        
+        /* Back Button */
+        .back-button {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #555, #888);
+            color: #fff;
+            padding: 0.9rem 2.5rem;
+            border-radius: 50px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            z-index: 1999;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-50%) translateY(-5px);
+            box-shadow: 0 10px 30px rgba(136, 136, 136, 0.5);
+            background: linear-gradient(135deg, #666, #999);
+        }
+        
+        /* Language Switch */
+        .lang-en,
+        .lang-zh {
+            display: none;
+        }
+        
+        .lang-en.active,
+        .lang-zh.active {
+            display: inline;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .identity-selector {
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            
+            .identity-section {
+                flex: none !important;
+                min-height: 100vh;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .identity-section:hover {
+                flex: none;
+            }
+            
+            .identity-description,
+            .identity-features,
+            .identity-btn {
+                opacity: 1;
+            }
+            
+            .identity-icon {
+                font-size: 4rem;
+            }
+            
+            .identity-title {
+                font-size: 2rem;
+            }
+            
+            .identity-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .top-bar {
+                padding: 0 1.5rem;
+            }
+            
+            .logo-font {
+                font-size: 1.5rem;
+            }
+            
+            .logo-sub {
+                font-size: 0.55rem;
+            }
+            
+            .language-toggle {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+            }
+            
+            .back-button {
+                bottom: 1rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .identity-icon {
+                font-size: 3.5rem;
+            }
+            
+            .identity-title {
+                font-size: 1.8rem;
+            }
+            
+            .identity-description {
+                font-size: 0.95rem;
+            }
+            
+            .feature-item {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Fade animation */
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar with Logo and Language Toggle -->
+    <div class="top-bar">
+        <div class="logo-container">
+            <div class="logo-font">HKAIIFF</div>
+            <div class="logo-sub">
+                <span class="lang-en active">Hong Kong AI International Film Festival</span>
+                <span class="lang-zh">香港AI國際電影節</span>
+            </div>
+        </div>
+        
+        <button class="language-toggle" id="languageToggle">
+            <i class="fas fa-globe"></i>
+            <span class="lang-en active">中文</span>
+            <span class="lang-zh">English</span>
+        </button>
+    </div>
+
+    <!-- Identity Selection Screen -->
+    <div class="identity-selector" id="identitySelector">
+        <!-- Creator Identity -->
+        <div class="identity-section creator-section" id="creatorSection">
+            <div class="bg-pattern"></div>
+            
+            <div class="particles">
+                <div class="particle" style="color: var(--creator-accent);"></div>
+                <div class="particle" style="color: var(--creator-accent);"></div>
+                <div class="particle" style="color: var(--creator-accent);"></div>
+                <div class="particle" style="color: var(--creator-accent);"></div>
+                <div class="particle" style="color: var(--creator-accent);"></div>
+                <div class="particle" style="color: var(--creator-accent);"></div>
+            </div>
+            
+            <div class="identity-content">
+                <div class="identity-icon">
+                    <i class="fas fa-wand-magic-sparkles"></i>
+                </div>
+                <h2 class="identity-title">
+                    <span class="lang-en active">Creator</span>
+                    <span class="lang-zh">創作者</span>
+                </h2>
+                <p class="identity-subtitle">
+                    <span class="lang-en active">The 'Conductor'</span>
+                    <span class="lang-zh">「指揮家」</span>
+                </p>
+                <p class="identity-description">
+                    <span class="lang-en active">You're not just making movies. You're 'conducting' AI systems, turning prompts into symphonies, and transforming creation into a new art form of instruction design.</span>
+                    <span class="lang-zh">您不只是在製作電影。您在「指揮」AI 系統,將提示詞變為交響樂,將創作轉化為指令設計的新藝術。</span>
+                </p>
+                <div class="identity-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">AIF Academy: Evolve with top mentors</span>
+                            <span class="lang-zh">AIF 學院:與頂級導師共同進化</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">AIF Market: Incubate & fund your IP</span>
+                            <span class="lang-zh">AIF 市場:孵化您的 IP 並獲得融資</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">$3M prizes & global recognition</span>
+                            <span class="lang-zh">300萬美元獎金與國際認可</span>
+                        </span>
+                    </div>
+                </div>
+                <button class="identity-btn creator-btn" onclick="enterIdentity('creator')">
+                    <span class="lang-en active">Enter Creator Workspace</span>
+                    <span class="lang-zh">進入創作者工作台</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Explorer Identity -->
+        <div class="identity-section explorer-section" id="explorerSection">
+            <div class="bg-pattern"></div>
+            
+            <div class="particles">
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+                <div class="particle" style="color: var(--explorer-accent);"></div>
+            </div>
+            
+            <div class="identity-content">
+                <div class="identity-icon">
+                    <i class="fas fa-compass"></i>
+                </div>
+                <h2 class="identity-title">
+                    <span class="lang-en active">Explorer</span>
+                    <span class="lang-zh">探索者</span>
+                </h2>
+                <p class="identity-subtitle">
+                    <span class="lang-en active">The 'World Inhabitant'</span>
+                    <span class="lang-zh">「世界棲息者」</span>
+                </p>
+                <p class="identity-description">
+                    <span class="lang-en active">You're not just watching movies. You will 'inhabit' the movie world. Your 'physiological signals' will affect the plot in real time. You will establish permanent relationships with 'digital lives'.</span>
+                    <span class="lang-zh">您不只是在觀看電影。您將「棲息」於電影世界之中。您的「生理信號」將實時影響劇情。您將與「數字生命」建立永久關係。</span>
+                </p>
+                <div class="identity-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">404.world: Sustainable movie worlds</span>
+                            <span class="lang-zh">404.world:體驗永續電影世界</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">Neural Screening: Conduct with consciousness</span>
+                            <span class="lang-zh">神經響應式展映:用意識指揮電影</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">Virtual Stage: Real-time AI co-creation</span>
+                            <span class="lang-zh">虛擬舞台秀:實時決定 AI 創作</span>
+                        </span>
+                    </div>
+                </div>
+                <button class="identity-btn explorer-btn" onclick="enterIdentity('explorer')">
+                    <span class="lang-en active">Enter Screening Hall</span>
+                    <span class="lang-zh">進入沉浸式展映廳</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Citizen Identity -->
+        <div class="identity-section citizen-section" id="citizenSection">
+            <div class="bg-pattern"></div>
+            
+            <div class="particles">
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+                <div class="particle" style="color: var(--citizen-accent);"></div>
+            </div>
+            
+            <div class="identity-content">
+                <div class="identity-icon">
+                    <i class="fas fa-users-gear"></i>
+                </div>
+                <h2 class="identity-title">
+                    <span class="lang-en active">Citizen</span>
+                    <span class="lang-zh">治理者</span>
+                </h2>
+                <p class="identity-subtitle">
+                    <span class="lang-en active">The 'Ecosystem Co-builder'</span>
+                    <span class="lang-zh">「生態共建者」</span>
+                </p>
+                <p class="identity-description">
+                    <span class="lang-en active">You're not just consuming content. You're 'exercising power'. Here, your 'likes' will transform into real votes with AIF tokens, and your 'foresight' will become investable digital assets.</span>
+                    <span class="lang-zh">您不只是在消費內容。您在「行使權力」。在這裡,您的「喜愛」將轉化為 AIF 代幣的真實選票,您的「遠見」將成為可投資的數字資產。</span>
+                </p>
+                <div class="identity-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">AIF Community Award: Token voting</span>
+                            <span class="lang-zh">AIF 社區大獎:代幣投票決定</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">Hybrid Jury: Elect representatives</span>
+                            <span class="lang-zh">混合評審團:選舉社區代表</span>
+                        </span>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">✓</span>
+                        <span>
+                            <span class="lang-en active">AIF Market: Invest in early AI film IPs</span>
+                            <span class="lang-zh">AIF 市場:投資早期 AI 電影 IP</span>
+                        </span>
+                    </div>
+                </div>
+                <button class="identity-btn citizen-btn" onclick="enterIdentity('citizen')">
+                    <span class="lang-en active">Enter Governance & Market</span>
+                    <span class="lang-zh">進入治理與市場</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="window.history.back()">
+        <i class="fas fa-arrow-left"></i>
+        <span class="lang-en active">Back</span>
+        <span class="lang-zh">返回上一頁</span>
+    </button>
+
+    <script>
+        // Language toggle functionality
+        const languageToggle = document.getElementById('languageToggle');
+        let currentLanguage = 'en';
+        
+        languageToggle.addEventListener('click', function() {
+            currentLanguage = currentLanguage === 'en' ? 'zh' : 'en';
+            updateLanguage(currentLanguage);
+        });
+        
+        function updateLanguage(lang) {
+            // Remove all active classes
+            document.querySelectorAll('.lang-en, .lang-zh').forEach(element => {
+                element.classList.remove('active');
+            });
+            
+            // Add active class to selected language
+            if (lang === 'en') {
+                document.querySelectorAll('.lang-en').forEach(element => {
+                    element.classList.add('active');
+                });
+            } else {
+                document.querySelectorAll('.lang-zh').forEach(element => {
+                    element.classList.add('active');
+                });
+            }
+        }
+        
+        // Enter identity function
+        function enterIdentity(identity) {
+            const identitySelector = document.getElementById('identitySelector');
+            identitySelector.classList.add('fade-out');
+            
+            // Simulate navigation (replace with actual navigation)
+            setTimeout(() => {
+                console.log('Entering ' + identity + ' workspace');
+                window.location.href = '用戶中心1.html';
+                // alert('進入 ' + identity + ' 工作區 (此處可連接到實際頁面)');
+            }, 500);
+        }
+        
+        // Add smooth scrolling for mobile
+        if (window.innerWidth <= 1024) {
+            const sections = document.querySelectorAll('.identity-section');
+            sections.forEach((section, index) => {
+                section.addEventListener('click', function() {
+                    if (window.innerWidth <= 1024) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        }
+    </script>
+</body>
+</html>
