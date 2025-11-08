@@ -106,15 +106,15 @@
         }
 
         .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(150, 150, 150, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
         }
 
         /* 主容器 */
         .main-container {
             display: flex;
-            height: 100vh;
-            padding-top: 80px;
+            margin-top: 80px;
+            min-height: calc(100vh - 80px);
         }
 
         /* 背景動畫 */
@@ -125,14 +125,8 @@
             width: 100%;
             height: 100%;
             z-index: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(155, 89, 182, 0.15), transparent 50%),
-                        radial-gradient(circle at 80% 50%, rgba(52, 152, 219, 0.15), transparent 50%);
-            animation: gaeFloat 20s ease-in-out infinite;
-        }
-
-        @keyframes gaeFloat {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
+            pointer-events: none;
+            transition: all 0.8s ease;
         }
 
         .background-gae.explorer-theme {
@@ -178,30 +172,35 @@
         }
 
         .menu-item.active {
-            background: linear-gradient(135deg, rgba(0, 255, 157, 0.2), rgba(52, 152, 219, 0.2));
+            background: rgba(0, 255, 157, 0.1);
             border-color: var(--accent);
-            box-shadow: 0 5px 20px rgba(0, 255, 157, 0.3);
         }
 
-        .menu-item.locked {
-            opacity: 0.5;
-            background: rgba(100, 100, 100, 0.1);
-            cursor: not-allowed;
-        }
-
-        .menu-item.unlocked {
-            opacity: 0.8;
-        }
-
-        .menu-item:not(.locked):not(.active):hover {
+        .menu-item:hover:not(.locked) {
             background: rgba(255, 255, 255, 0.1);
             transform: translateX(5px);
         }
 
+        .menu-item.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .menu-item.locked:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .menu-item.unlocking {
+            animation: unlockPulse 0.5s ease-in-out 3;
+        }
+
+        @keyframes unlockPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px var(--accent); }
+        }
+
         .menu-icon {
             font-size: 2rem;
-            width: 40px;
-            text-align: center;
         }
 
         .menu-text {
@@ -209,63 +208,35 @@
         }
 
         .menu-title {
-            font-size: 1.2rem;
             font-weight: 700;
-            margin-bottom: 3px;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
         }
 
         .menu-subtitle {
-            font-size: 0.8rem;
-            opacity: 0.7;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .lock-icon {
             font-size: 1.5rem;
-            color: #888;
+            color: rgba(255, 255, 255, 0.3);
         }
 
         .menu-divider {
             height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            background: rgba(255, 255, 255, 0.1);
             margin: 10px 0;
         }
 
-        /* 解鎖動畫 */
-        @keyframes unlockFlash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-
-        @keyframes unlockGlow {
-            0% { box-shadow: 0 0 0 rgba(0, 255, 157, 0); }
-            50% { box-shadow: 0 0 30px rgba(0, 255, 157, 0.8); }
-            100% { box-shadow: 0 0 0 rgba(0, 255, 157, 0); }
-        }
-
-        .menu-item.unlocking {
-            animation: unlockFlash 0.3s ease 3, unlockGlow 1.5s ease;
-        }
-
-        /* 右側儀表板 */
-        .dashboard-container {
-            position: relative;
-            z-index: 10;
+        /* 右側內容區域 */
+        .content-area {
             flex: 1;
             padding: 40px;
+            position: relative;
+            z-index: 10;
             overflow-y: auto;
-        }
-
-        .dashboard-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .dashboard-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .dashboard-container::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 4px;
+            max-height: calc(100vh - 80px);
         }
 
         .dashboard {
@@ -296,23 +267,23 @@
         }
 
         .dashboard-subtitle {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
         }
 
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
-            margin-bottom: 30px;
+            margin-top: 30px;
         }
 
         .function-card {
-            padding: 30px;
-            background: rgba(26, 32, 44, 0.8);
-            border-radius: 20px;
+            background: rgba(26, 32, 44, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -323,21 +294,20 @@
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
+            width: 100%;
             height: 4px;
             background: linear-gradient(90deg, var(--accent), var(--primary));
         }
 
         .function-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 255, 157, 0.3);
-            border-color: var(--accent);
+            box-shadow: 0 15px 30px rgba(0, 255, 157, 0.2);
+            border-color: rgba(0, 255, 157, 0.3);
         }
 
         .function-card.primary {
-            grid-column: span 2;
-            background: linear-gradient(135deg, rgba(0, 255, 157, 0.1), rgba(52, 152, 219, 0.1));
             border: 2px solid var(--accent);
+            background: rgba(0, 255, 157, 0.05);
         }
 
         .card-icon {
@@ -355,18 +325,20 @@
 
         .card-description {
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.8);
             line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 20px;
         }
 
         .card-button {
-            padding: 12px 30px;
-            background: linear-gradient(135deg, var(--accent), var(--primary));
+            width: 100%;
+            padding: 12px 25px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             border: none;
             border-radius: 25px;
             color: #000;
             font-weight: 700;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
         }
@@ -374,40 +346,6 @@
         .card-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            background: rgba(0, 255, 157, 0.2);
-            border: 1px solid var(--accent);
-            border-radius: 15px;
-            font-size: 0.85rem;
-            color: var(--accent);
-            margin-top: 10px;
-        }
-
-        .work-list {
-            list-style: none;
-        }
-
-        .work-item {
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .balance-display {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--gold), #ffed4e);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 20px 0;
         }
 
         /* 模態框 */
@@ -427,7 +365,12 @@
 
         .modal.show {
             display: flex;
-            animation: fadeIn 0.3s ease;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
@@ -439,6 +382,12 @@
             width: 90%;
             text-align: center;
             position: relative;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-icon {
@@ -494,7 +443,46 @@
             box-shadow: 0 8px 20px rgba(0, 255, 157, 0.4);
         }
 
-        /* 移動端優化 */
+        /* 工作列表 */
+        .work-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .work-item {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .work-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-badge.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+        }
+
+        .status-badge.approved {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+        }
+
+        /* 響應式設計 */
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
@@ -502,7 +490,6 @@
 
             .identity-menu {
                 width: 100%;
-                padding: 20px;
                 flex-direction: row;
                 overflow-x: auto;
                 border-right: none;
@@ -513,11 +500,7 @@
                 min-width: 200px;
             }
 
-            .menu-divider {
-                display: none;
-            }
-
-            .dashboard-container {
+            .content-area {
                 padding: 20px;
             }
 
@@ -529,84 +512,21 @@
                 grid-template-columns: 1fr;
             }
 
-            .function-card.primary {
-                grid-column: span 1;
-            }
-
             .modal-content {
-                padding: 30px 20px;
+                padding: 30px;
             }
 
             .modal-title {
                 font-size: 1.8rem;
             }
 
-            .balance-display {
-                font-size: 2.5rem;
+            .modal-buttons {
+                flex-direction: column;
             }
-        }
 
-        /* 搜索框 */
-        .search-box {
-            width: 100%;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(0, 255, 157, 0.3);
-            border-radius: 15px;
-            color: #fff;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 255, 157, 0.3);
-        }
-
-        /* 作品網格 */
-        .works-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .work-card {
-            background: rgba(26, 32, 44, 0.6);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .work-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 157, 0.2);
-        }
-
-        .work-image {
-            width: 100%;
-            height: 150px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .work-info {
-            padding: 15px;
-        }
-
-        .work-title {
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .work-category {
-            font-size: 0.85rem;
-            color: var(--accent);
+            .modal-button {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -634,15 +554,15 @@
         <div class="identity-menu">
             <!-- 探索者 (默認激活) -->
             <div class="menu-item active" data-role="explorer" onclick="switchRole('explorer')">
-                <div class="menu-icon">🧭</div>
+                <div class="menu-icon">🌍</div>
                 <div class="menu-text">
                     <div class="menu-title">
                         <span class="lang-en">Explorer</span>
                         <span class="lang-zh">探索者</span>
                     </div>
                     <div class="menu-subtitle">
-                        <span class="lang-en">World Inhabitant</span>
-                        <span class="lang-zh">世界棲息者</span>
+                        <span class="lang-en">AI Experience</span>
+                        <span class="lang-zh">AI體驗者</span>
                     </div>
                 </div>
             </div>
@@ -683,77 +603,63 @@
 
             <!-- 生態護照 -->
             <div class="menu-item" data-role="passport" onclick="switchRole('passport')">
-                <div class="menu-icon">🪪</div>
+                <div class="menu-icon">🎫</div>
                 <div class="menu-text">
                     <div class="menu-title">
                         <span class="lang-en">Passport</span>
                         <span class="lang-zh">生態護照</span>
                     </div>
                     <div class="menu-subtitle">
-                        <span class="lang-en">My Assets</span>
-                        <span class="lang-zh">我的資產</span>
+                        <span class="lang-en">My Profile</span>
+                        <span class="lang-zh">我的檔案</span>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 右側儀表板容器 -->
-        <div class="dashboard-container">
+        <!-- 右側內容區域 -->
+        <div class="content-area">
             <!-- 探索者儀表板 -->
             <div class="dashboard active" id="explorer-dashboard">
                 <div class="dashboard-header">
                     <h1 class="dashboard-title">
-                        <span class="lang-en">Immersive Screening Hall</span>
-                        <span class="lang-zh">沉浸式展映廳</span>
+                        <span class="lang-en">Explorer Universe</span>
+                        <span class="lang-zh">探索者宇宙</span>
                     </h1>
                     <p class="dashboard-subtitle">
-                        <span class="lang-en">Explore AI-native films and inhabit cinematic worlds</span>
-                        <span class="lang-zh">探索AI原生電影,棲息於電影世界</span>
+                        <span class="lang-en">Immerse yourself in AI-generated film experiences and interactive worlds</span>
+                        <span class="lang-zh">沉浸於AI生成的電影體驗和互動世界</span>
                     </p>
                 </div>
 
                 <div class="dashboard-grid">
-                    <!-- AI策展人 -->
-                    <div class="function-card primary">
-                        <span class="card-icon">🤖</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">AI Curator</span>
-                            <span class="lang-zh">AI策展人</span>
-                        </h3>
-                        <p class="card-description">
-                            <span class="lang-en">Use natural language to search and discover films. Try: "Recommend an animated short exploring AI ethics"</span>
-                            <span class="lang-zh">使用自然語言搜索和發現電影。試試:"推薦一部探討AI倫理的動畫短片"</span>
-                        </p>
-                        <input type="text" class="search-box" placeholder="Enter keywords (e.g., 'generative', 'Iris')..." id="curatorSearch">
-                    </div>
-
-                    <!-- 作品網格 -->
+                    <!-- 觀看作品 -->
                     <div class="function-card">
                         <span class="card-icon">🎬</span>
                         <h3 class="card-title">
-                            <span class="lang-en">Featured Works</span>
-                            <span class="lang-zh">精選作品</span>
+                            <span class="lang-en">Watch AI Films</span>
+                            <span class="lang-zh">觀看AI電影</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Explore all finalist works in dynamic star map</span>
-                            <span class="lang-zh">以動態星圖探索所有入圍作品</span>
+                            <span class="lang-en">Explore the latest AI-generated films and shorts</span>
+                            <span class="lang-zh">探索最新的AI生成電影和短片</span>
                         </p>
                         <button class="card-button" onclick="viewWorks()">
-                            <span class="lang-en">View All Works</span>
-                            <span class="lang-zh">查看所有作品</span>
+                            <span class="lang-en">Browse Gallery</span>
+                            <span class="lang-zh">瀏覽展廳</span>
                         </button>
                     </div>
 
                     <!-- 404.world -->
                     <div class="function-card">
-                        <span class="card-icon">🌍</span>
+                        <span class="card-icon">🌐</span>
                         <h3 class="card-title">
-                            <span class="lang-en">404.world</span>
-                            <span class="lang-zh">404世界</span>
+                            <span class="lang-en">404.world Experience</span>
+                            <span class="lang-zh">404世界體驗</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Enter digital twin spaces and experience persistent cinematic worlds</span>
-                            <span class="lang-zh">進入數字孿生空間,體驗永續的電影世界</span>
+                            <span class="lang-en">Enter an AI-driven interactive world where every choice matters</span>
+                            <span class="lang-zh">進入AI驅動的互動世界,每個選擇都很重要</span>
                         </p>
                         <button class="card-button" onclick="enter404World()">
                             <span class="lang-en">Enter World</span>
@@ -815,20 +721,20 @@
                     <div class="function-card primary">
                         <span class="card-icon">➕</span>
                         <h3 class="card-title">
-                            <span class="lang-en">Submit Your New Work</span>
-                            <span class="lang-zh">提交您的新作品</span>
+                            <span class="lang-en">Submit New Work</span>
+                            <span class="lang-zh">提交新作品</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">AI Submission Assistant will guide you through the complex form. Compete for the Unicorn Gold Award!</span>
-                            <span class="lang-zh">AI提交協同助手將引導您填寫複雜表單。競爭獨角獸金獎!</span>
+                            <span class="lang-en">AI Submission Assistant will guide you through the complex form</span>
+                            <span class="lang-zh">AI提交協同助手將引導您填寫複雜表單</span>
                         </p>
                         <div style="margin: 20px 0;">
                             <p style="color: var(--gold); font-weight: 700;">
-                                <span class="lang-en">📅 Early Submission Deadline: Jan 31, 2026</span>
-                                <span class="lang-zh">📅 早期提交截止日期: 2026年1月31日</span>
+                                <span class="lang-en">📅 Early Deadline: Jan 31, 2026</span>
+                                <span class="lang-zh">📅 早期截止: 2026年1月31日</span>
                             </p>
                             <p style="color: var(--accent); margin-top: 10px;">
-                                <span class="lang-en">💰 Early Bird: 25% discount on entry fees</span>
+                                <span class="lang-en">💰 Early Bird: 25% discount</span>
                                 <span class="lang-zh">💰 早鳥優惠: 報名費75折</span>
                             </p>
                         </div>
@@ -838,7 +744,7 @@
                         </button>
                     </div>
 
-                    <!-- 我已提交的作品 -->
+                    <!-- 我的作品 -->
                     <div class="function-card">
                         <span class="card-icon">📝</span>
                         <h3 class="card-title">
@@ -857,50 +763,12 @@
                                         <span class="lang-zh">提交於: 2025年11月15日</span>
                                     </div>
                                 </div>
-                                <span class="status-badge">
+                                <span class="status-badge pending">
                                     <span class="lang-en">Under Review</span>
-                                    <span class="lang-zh">評審中</span>
+                                    <span class="lang-zh">審核中</span>
                                 </span>
                             </li>
                         </ul>
-                        <button class="card-button" style="margin-top: 15px;" onclick="viewMyWorks()">
-                            <span class="lang-en">View All</span>
-                            <span class="lang-zh">查看全部</span>
-                        </button>
-                    </div>
-
-                    <!-- AIF學院 -->
-                    <div class="function-card">
-                        <span class="card-icon">🎓</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">AIF Academy</span>
-                            <span class="lang-zh">AIF學院</span>
-                        </h3>
-                        <p class="card-description">
-                            <span class="lang-en">Enhance your AI conductor skills with world-class mentors</span>
-                            <span class="lang-zh">與全球頂級導師一起提升您的AI指揮技巧</span>
-                        </p>
-                        <button class="card-button" onclick="goToAcademy()">
-                            <span class="lang-en">Enter Academy</span>
-                            <span class="lang-zh">進入學院</span>
-                        </button>
-                    </div>
-
-                    <!-- AIF市場 -->
-                    <div class="function-card">
-                        <span class="card-icon">💰</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">AIF Market - IP Incubation</span>
-                            <span class="lang-zh">AIF市場 - IP孵化</span>
-                        </h3>
-                        <p class="card-description">
-                            <span class="lang-en">Incubate your early-stage IP and get financing</span>
-                            <span class="lang-zh">孵化您的早期IP,獲得融資</span>
-                        </p>
-                        <button class="card-button" onclick="goToMarket()">
-                            <span class="lang-en">Explore Market</span>
-                            <span class="lang-zh">探索市場</span>
-                        </button>
                     </div>
 
                     <!-- 競賽信息 -->
@@ -911,12 +779,29 @@
                             <span class="lang-zh">競賽信息</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">4 categories, 27 awards, $3M total prize pool</span>
-                            <span class="lang-zh">4大類別, 27個獎項, 300萬美元總獎金</span>
+                            <span class="lang-en">View prize categories, judging criteria, and key dates</span>
+                            <span class="lang-zh">查看獎項類別、評審標準和關鍵日期</span>
                         </p>
                         <button class="card-button" onclick="viewCompetition()">
-                            <span class="lang-en">View Details</span>
-                            <span class="lang-zh">查看詳情</span>
+                            <span class="lang-en">Learn More</span>
+                            <span class="lang-zh">了解更多</span>
+                        </button>
+                    </div>
+
+                    <!-- AI創作工具 -->
+                    <div class="function-card">
+                        <span class="card-icon">🎨</span>
+                        <h3 class="card-title">
+                            <span class="lang-en">AI Creation Tools</span>
+                            <span class="lang-zh">AI創作工具</span>
+                        </h3>
+                        <p class="card-description">
+                            <span class="lang-en">Access our suite of AI tools for film creation</span>
+                            <span class="lang-zh">訪問我們的AI電影創作工具套件</span>
+                        </p>
+                        <button class="card-button" onclick="openTools()">
+                            <span class="lang-en">Open Tools</span>
+                            <span class="lang-zh">打開工具</span>
                         </button>
                     </div>
                 </div>
@@ -926,127 +811,76 @@
             <div class="dashboard" id="governor-dashboard">
                 <div class="dashboard-header">
                     <h1 class="dashboard-title">
-                        <span class="lang-en">Governance & Market</span>
-                        <span class="lang-zh">治理與市場</span>
+                        <span class="lang-en">Governor Console</span>
+                        <span class="lang-zh">治理者控制台</span>
                     </h1>
                     <p class="dashboard-subtitle">
-                        <span class="lang-en">Exercise your power and invest in the future of AI cinema</span>
-                        <span class="lang-zh">行使您的權力,投資AI電影的未來</span>
+                        <span class="lang-en">Exercise your governance power and shape the festival's future</span>
+                        <span class="lang-zh">行使您的治理權力,塑造電影節的未來</span>
                     </p>
                 </div>
 
                 <div class="dashboard-grid">
-                    <!-- AIF社區大獎投票 -->
+                    <!-- 投票治理 -->
                     <div class="function-card primary">
                         <span class="card-icon">🗳️</span>
                         <h3 class="card-title">
-                            <span class="lang-en">AIF Community Award Voting</span>
-                            <span class="lang-zh">AIF社區大獎投票</span>
+                            <span class="lang-en">Governance Voting</span>
+                            <span class="lang-zh">治理投票</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Your AIF tokens = Real votes. Decide the winner of Community Award!</span>
-                            <span class="lang-zh">您的AIF代幣 = 真實選票。決定社區大獎的歸屬!</span>
+                            <span class="lang-en">Vote on proposals using your AIF tokens</span>
+                            <span class="lang-zh">使用您的AIF代幣對提案進行投票</span>
                         </p>
                         <div style="margin: 20px 0;">
-                            <div class="work-item" style="margin-bottom: 10px;">
-                                <span>
-                                    <span class="lang-en">Candidate 1: "AI Dreams"</span>
-                                    <span class="lang-zh">候選作品1: "AI之夢"</span>
-                                </span>
-                                <button class="card-button" style="padding: 8px 20px; font-size: 0.9rem;" onclick="vote(1)">
-                                    <span class="lang-en">Vote</span>
-                                    <span class="lang-zh">投票</span>
-                                </button>
-                            </div>
-                            <div class="work-item" style="margin-bottom: 10px;">
-                                <span>
-                                    <span class="lang-en">Candidate 2: "Digital Life"</span>
-                                    <span class="lang-zh">候選作品2: "數字生命"</span>
-                                </span>
-                                <button class="card-button" style="padding: 8px 20px; font-size: 0.9rem;" onclick="vote(2)">
-                                    <span class="lang-en">Vote</span>
-                                    <span class="lang-zh">投票</span>
-                                </button>
-                            </div>
+                            <p style="color: var(--accent); font-weight: 700;">
+                                <span class="lang-en">🗳️ Active Proposals: 3</span>
+                                <span class="lang-zh">🗳️ 活躍提案: 3個</span>
+                            </p>
                         </div>
-                        <button class="card-button" onclick="viewAllProposals()">
-                            <span class="lang-en">View All Candidates</span>
-                            <span class="lang-zh">查看所有候選作品</span>
+                        <button class="card-button" onclick="viewProposals()">
+                            <span class="lang-en">View Proposals</span>
+                            <span class="lang-zh">查看提案</span>
                         </button>
                     </div>
 
-                    <!-- 我的AIF餘額 -->
-                    <div class="function-card">
-                        <span class="card-icon">💎</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">My AIF Balance</span>
-                            <span class="lang-zh">我的AIF餘額</span>
-                        </h3>
-                        <div class="balance-display">1,337</div>
-                        <p style="text-align: center; color: #888; margin-bottom: 20px;">
-                            <span class="lang-en">AIF Tokens</span>
-                            <span class="lang-zh">AIF代幣</span>
-                        </p>
-                        <button class="card-button" onclick="viewTransactions()">
-                            <span class="lang-en">Transaction History</span>
-                            <span class="lang-zh">交易記錄</span>
-                        </button>
-                    </div>
-
-                    <!-- AIF市場投資 -->
-                    <div class="function-card">
-                        <span class="card-icon">🚀</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">AIF Market</span>
-                            <span class="lang-zh">AIF市場</span>
-                        </h3>
-                        <p class="card-description">
-                            <span class="lang-en">Invest in the next unicorn IP and become a co-creator</span>
-                            <span class="lang-zh">投資下一個獨角獸IP,成為共創者</span>
-                        </p>
-                        <button class="card-button" onclick="goToAIFMarket()">
-                            <span class="lang-en">Explore Market</span>
-                            <span class="lang-zh">探索市場</span>
-                        </button>
-                    </div>
-
-                    <!-- 混合智能評審團 -->
+                    <!-- 評審團選舉 -->
                     <div class="function-card">
                         <span class="card-icon">👥</span>
                         <h3 class="card-title">
-                            <span class="lang-en">Hybrid Intelligence Jury</span>
-                            <span class="lang-zh">混合智能評審團</span>
+                            <span class="lang-en">Jury Election</span>
+                            <span class="lang-zh">評審團選舉</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Participate in electing community representatives</span>
-                            <span class="lang-zh">參與選舉社區代表</span>
+                            <span class="lang-en">Vote for jury representatives</span>
+                            <span class="lang-zh">為評審團代表投票</span>
                         </p>
-                        <button class="card-button" onclick="viewJuryElection()">
-                            <span class="lang-en">View Election</span>
-                            <span class="lang-zh">查看選舉</span>
+                        <button class="card-button" onclick="voteJury()">
+                            <span class="lang-en">Vote Now</span>
+                            <span class="lang-zh">立即投票</span>
                         </button>
                     </div>
 
-                    <!-- 議事視圖 -->
+                    <!-- IP投資池 -->
                     <div class="function-card">
-                        <span class="card-icon">📺</span>
+                        <span class="card-icon">💎</span>
                         <h3 class="card-title">
-                            <span class="lang-en">The Chamber</span>
-                            <span class="lang-zh">議事視圖</span>
+                            <span class="lang-en">IP Investment Pool</span>
+                            <span class="lang-zh">IP投資池</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Live broadcast of awards ceremony & real-time governance</span>
-                            <span class="lang-zh">頒獎典禮直播 & 實時治理</span>
+                            <span class="lang-en">Invest in early-stage IPs and share revenue</span>
+                            <span class="lang-zh">投資早期IP並分享收益</span>
                         </p>
-                        <button class="card-button" onclick="enterChamber()">
-                            <span class="lang-en">Enter Chamber</span>
-                            <span class="lang-zh">進入議事廳</span>
+                        <button class="card-button" onclick="viewIPPool()">
+                            <span class="lang-en">Explore IPs</span>
+                            <span class="lang-zh">探索IP</span>
                         </button>
                     </div>
 
                     <!-- NFT徽章 -->
                     <div class="function-card">
-                        <span class="card-icon">🪪</span>
+                        <span class="card-icon">🎖️</span>
                         <h3 class="card-title">
                             <span class="lang-en">Governor NFT Badge</span>
                             <span class="lang-zh">治理者NFT徽章</span>
@@ -1055,7 +889,7 @@
                             <span class="lang-en">View your governance rights and badge level</span>
                             <span class="lang-zh">查看您的治理權益和徽章等級</span>
                         </p>
-                        <div class="status-badge" style="display: block; text-align: center;">
+                        <div class="status-badge approved" style="display: block; text-align: center; margin-top: 10px;">
                             <span class="lang-en">✅ Level 1 Governor</span>
                             <span class="lang-zh">✅ 一級治理者</span>
                         </div>
@@ -1111,120 +945,53 @@
                             <span class="lang-en">Identity Status</span>
                             <span class="lang-zh">身份狀態</span>
                         </h3>
-                        <div style="margin: 20px 0;">
-                            <div class="status-badge" style="display: block; margin: 10px 0; background: rgba(0, 255, 157, 0.2);">
-                                <span class="lang-en">✅ Explorer: Activated</span>
+                        <div style="text-align: left; margin: 20px 0;">
+                            <p style="margin: 10px 0;">
+                                <span class="lang-en">✅ Explorer: Active</span>
                                 <span class="lang-zh">✅ 探索者: 已激活</span>
-                            </div>
-                            <div class="status-badge" style="display: block; margin: 10px 0; background: rgba(100, 100, 100, 0.2); color: #888;">
+                            </p>
+                            <p style="margin: 10px 0;" id="creator-status">
                                 <span class="lang-en">🔒 Creator: Locked</span>
                                 <span class="lang-zh">🔒 創作者: 鎖定</span>
-                            </div>
-                            <div class="status-badge" style="display: block; margin: 10px 0; background: rgba(100, 100, 100, 0.2); color: #888;">
+                            </p>
+                            <p style="margin: 10px 0;" id="governor-status">
                                 <span class="lang-en">🔒 Governor: Locked</span>
                                 <span class="lang-zh">🔒 治理者: 鎖定</span>
-                            </div>
+                            </p>
                         </div>
                     </div>
 
-                    <!-- 總資產 -->
+                    <!-- 資產總覽 -->
                     <div class="function-card">
                         <span class="card-icon">💰</span>
                         <h3 class="card-title">
-                            <span class="lang-en">Total Assets</span>
-                            <span class="lang-zh">總資產</span>
+                            <span class="lang-en">Assets Overview</span>
+                            <span class="lang-zh">資產總覽</span>
                         </h3>
-                        <div style="margin: 20px 0; text-align: left;">
-                            <p style="margin: 15px 0; font-size: 1.2rem;">
-                                <strong>
-                                    <span class="lang-en">AIF Tokens:</span>
-                                    <span class="lang-zh">AIF代幣:</span>
-                                </strong> 
-                                <span style="color: var(--gold);">1,337</span>
-                            </p>
-                            <p style="margin: 15px 0; font-size: 1.2rem;">
-                                <strong>
-                                    <span class="lang-en">NFT Assets:</span>
-                                    <span class="lang-zh">NFT資產:</span>
-                                </strong> 
-                                <span style="color: var(--accent);">3</span>
-                            </p>
-                            <p style="margin: 15px 0; font-size: 1.2rem;">
-                                <strong>
-                                    <span class="lang-en">Digital Assets:</span>
-                                    <span class="lang-zh">數字資產:</span>
-                                </strong> 
-                                <span style="color: var(--primary);">7</span>
-                            </p>
+                        <div style="text-align: left; margin: 20px 0;">
+                            <p style="margin: 10px 0;"><strong>AIF Tokens:</strong> 1,000</p>
+                            <p style="margin: 10px 0;"><strong>NFT Badges:</strong> 0</p>
+                            <p style="margin: 10px 0;"><strong>
+                                <span class="lang-en">Submitted Works:</span>
+                                <span class="lang-zh">已提交作品:</span>
+                            </strong> 0</p>
                         </div>
                     </div>
 
-                    <!-- 活動統計 -->
+                    <!-- 活動記錄 -->
                     <div class="function-card">
                         <span class="card-icon">📊</span>
                         <h3 class="card-title">
-                            <span class="lang-en">Activity Statistics</span>
-                            <span class="lang-zh">活動統計</span>
-                        </h3>
-                        <div style="margin: 20px 0; text-align: left;">
-                            <p style="margin: 15px 0;">
-                                <strong>
-                                    <span class="lang-en">Films Watched:</span>
-                                    <span class="lang-zh">觀看影片:</span>
-                                </strong> 24
-                            </p>
-                            <p style="margin: 15px 0;">
-                                <strong>
-                                    <span class="lang-en">Works Submitted:</span>
-                                    <span class="lang-zh">提交作品:</span>
-                                </strong> 1
-                            </p>
-                            <p style="margin: 15px 0;">
-                                <strong>
-                                    <span class="lang-en">Votes Cast:</span>
-                                    <span class="lang-zh">參與投票:</span>
-                                </strong> 0
-                            </p>
-                            <p style="margin: 15px 0;">
-                                <strong>
-                                    <span class="lang-en">Total Time:</span>
-                                    <span class="lang-zh">互動時長:</span>
-                                </strong> 18.5h
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- 設置 -->
-                    <div class="function-card">
-                        <span class="card-icon">⚙️</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">Settings</span>
-                            <span class="lang-zh">設置</span>
+                            <span class="lang-en">Activity Log</span>
+                            <span class="lang-zh">活動記錄</span>
                         </h3>
                         <p class="card-description">
-                            <span class="lang-en">Language, notifications, privacy, and wallet management</span>
-                            <span class="lang-zh">語言、通知、隱私和錢包管理</span>
+                            <span class="lang-en">View your complete activity history</span>
+                            <span class="lang-zh">查看您的完整活動歷史</span>
                         </p>
-                        <button class="card-button" onclick="openSettings()">
-                            <span class="lang-en">Open Settings</span>
-                            <span class="lang-zh">打開設置</span>
-                        </button>
-                    </div>
-
-                    <!-- 幫助中心 -->
-                    <div class="function-card">
-                        <span class="card-icon">❓</span>
-                        <h3 class="card-title">
-                            <span class="lang-en">Help Center</span>
-                            <span class="lang-zh">幫助中心</span>
-                        </h3>
-                        <p class="card-description">
-                            <span class="lang-en">User guides, FAQ, and support</span>
-                            <span class="lang-zh">使用指南、常見問題和支持</span>
-                        </p>
-                        <button class="card-button" onclick="openHelp()">
-                            <span class="lang-en">Get Help</span>
-                            <span class="lang-zh">獲取幫助</span>
+                        <button class="card-button" onclick="viewActivity()">
+                            <span class="lang-en">View History</span>
+                            <span class="lang-zh">查看歷史</span>
                         </button>
                     </div>
                 </div>
@@ -1241,8 +1008,8 @@
                 <span class="lang-zh">激活「創作者」身份</span>
             </h2>
             <p class="modal-description" id="modalDescription">
-                <span class="lang-en">You are about to unlock creator tools. You will be able to submit works, participate in competitions, and begin your journey as an 'AI Conductor'.</span>
-                <span class="lang-zh">您即將解鎖創作者工具。您將能夠提交作品、參與競賽,並開始您的『AI指揮家』之旅。</span>
+                <span class="lang-en">You are about to unlock creator tools.</span>
+                <span class="lang-zh">您即將解鎖創作者工具。</span>
             </p>
             <div class="modal-buttons">
                 <button class="modal-button confirm" onclick="confirmActivation()">
@@ -1277,7 +1044,7 @@
         });
 
         // ============================================
-        // 角色切換
+        // 角色系統
         // ============================================
         let currentRole = 'explorer';
         const roles = {
@@ -1287,41 +1054,52 @@
             passport: { unlocked: true, theme: 'explorer-theme' }
         };
 
+        // 切換角色
         function switchRole(role) {
-            if (!roles[role].unlocked && role !== 'passport') {
+            console.log('Switching to role:', role);
+            
+            if (!roles[role].unlocked && role !== 'passport' && role !== 'explorer') {
+                tryActivateRole(role);
                 return;
             }
 
-            // 更新菜單狀態
+            currentRole = role;
+
+            // 更新菜單項激活狀態
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.classList.remove('active');
+                if (item.getAttribute('data-role') === role) {
+                    item.classList.add('active');
+                }
             });
-            document.querySelector(`.menu-item[data-role="${role}"]`).classList.add('active');
-
-            // 更新儀表板
-            document.querySelectorAll('.dashboard').forEach(dashboard => {
-                dashboard.classList.remove('active');
-            });
-            document.getElementById(`${role}-dashboard`).classList.add('active');
 
             // 更新背景主題
             const bg = document.getElementById('backgroundGae');
-            bg.className = `background-gae ${roles[role].theme}`;
+            bg.className = 'background-gae ' + roles[role].theme;
 
-            currentRole = role;
+            // 切換儀表板
+            document.querySelectorAll('.dashboard').forEach(dashboard => {
+                dashboard.classList.remove('active');
+            });
+            document.getElementById(role + '-dashboard').classList.add('active');
         }
 
         // ============================================
-        // 嘗試激活角色
+        // 激活角色流程
         // ============================================
         let pendingRole = null;
 
         function tryActivateRole(role) {
+            console.log('Trying to activate role:', role);
+            
             if (roles[role].unlocked) {
+                console.log('Role already unlocked, switching...');
                 switchRole(role);
                 return;
             }
 
+            console.log('Role is locked, showing modal...');
+            
             // 顯示激活模態框
             pendingRole = role;
             const modal = document.getElementById('activationModal');
@@ -1339,49 +1117,81 @@
                 modalDescription.innerHTML = '<span class="lang-en">You are about to exercise ecosystem governance power. You will be able to vote with AIF tokens, elect jury representatives, and invest in early-stage IPs.<br><br><strong>⚠️ Requirement: Hold Governor NFT Badge</strong></span><span class="lang-zh">您即將行使生態治理權力。您將能夠使用AIF代幣投票、選舉評審團代表,並投資早期IP。<br><br><strong>⚠️ 需要:持有治理者NFT徽章</strong></span>';
             }
 
-            modal.classList.add('show');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.classList.add('show');
+            }, 10);
+            console.log('Modal should now be visible');
         }
 
         function closeModal() {
-            document.getElementById('activationModal').classList.remove('show');
+            const modal = document.getElementById('activationModal');
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
             pendingRole = null;
         }
 
         function confirmActivation() {
-            if (!pendingRole) return;
+            if (!pendingRole) {
+                console.log('No pending role to activate');
+                return;
+            }
 
+            console.log('Confirming activation for role:', pendingRole);
+
+            // 保存要激活的角色，因为closeModal会重置pendingRole
+            const roleToActivate = pendingRole;
+            
             // 關閉模態框
             closeModal();
 
             // 執行解鎖動畫
-            const menuItem = document.querySelector(`.menu-item[data-role="${pendingRole}"]`);
-            menuItem.classList.remove('locked');
-            menuItem.classList.add('unlocking');
-            
-            // 移除鎖圖標
-            const lockIcon = menuItem.querySelector('.lock-icon');
-            if (lockIcon) {
-                lockIcon.style.display = 'none';
-            }
-
-            // 1.5秒後完成動畫
-            setTimeout(() => {
-                menuItem.classList.remove('unlocking');
-                menuItem.classList.add('unlocked');
-                roles[pendingRole].unlocked = true;
+            const menuItem = document.querySelector(`.menu-item[data-role="${roleToActivate}"]`);
+            if (menuItem) {
+                menuItem.classList.remove('locked');
+                menuItem.classList.add('unlocking');
                 
-// 自動切換到新角色
-	                // switchRole(pendingRole);
-	                // pendingRole = null;
-	                window.location.href = '用戶中心2.html';
-            }, 1500);
+                // 移除鎖圖標
+                const lockIcon = menuItem.querySelector('.lock-icon');
+                if (lockIcon) {
+                    lockIcon.style.display = 'none';
+                }
+
+                // 1.5秒後完成動畫並自動切換到新角色
+                setTimeout(() => {
+                    menuItem.classList.remove('unlocking');
+                    roles[roleToActivate].unlocked = true;
+                    
+                    console.log('Role unlocked, switching to:', roleToActivate);
+                    
+                    // 更新護照頁面的狀態顯示
+                    updatePassportStatus(roleToActivate);
+                    
+                    // 自動切換到新解鎖的角色
+                    switchRole(roleToActivate);
+                }, 1500);
+            } else {
+                console.error('Menu item not found for role:', roleToActivate);
+            }
+        }
+
+        // 更新護照頁面的身份狀態
+        function updatePassportStatus(role) {
+            if (role === 'creator') {
+                const creatorStatus = document.getElementById('creator-status');
+                creatorStatus.innerHTML = '<span class="lang-en">✅ Creator: Active</span><span class="lang-zh">✅ 創作者: 已激活</span>';
+            } else if (role === 'governor') {
+                const governorStatus = document.getElementById('governor-status');
+                governorStatus.innerHTML = '<span class="lang-en">✅ Governor: Active</span><span class="lang-zh">✅ 治理者: 已激活</span>';
+            }
         }
 
         // ============================================
         // 功能按鈕事件
         // ============================================
         function goToHome() {
-            // 點擊logo跳轉到首頁
             window.location.href = 'index.html';
         }
 
@@ -1390,7 +1200,6 @@
                 '👋 Logging out...\n\nThank you for using HKAIIFF!' :
                 '👋 正在登出...\n\n感謝您使用HKAIIFF!';
             alert(msg);
-            // 跳轉到首頁
             window.location.href = 'index.html';
         }
 
@@ -1411,71 +1220,35 @@
         }
 
         function submitWork() {
-            alert(isEnglish ? '➕ Starting work submission process...' : '➕ 正在開始作品提交流程...');
-        }
-
-        function viewMyWorks() {
-            alert(isEnglish ? '📝 Viewing your submitted works...' : '📝 正在查看您提交的作品...');
-        }
-
-        function goToAcademy() {
-            alert(isEnglish ? '🎓 Opening AIF Academy...' : '🎓 正在打開AIF學院...');
-        }
-
-        function goToMarket() {
-            alert(isEnglish ? '💰 Opening AIF Market...' : '💰 正在打開AIF市場...');
+            alert(isEnglish ? '➕ Opening submission form...' : '➕ 正在打開提交表單...');
         }
 
         function viewCompetition() {
-            alert(isEnglish ? '🏆 Viewing competition details...' : '🏆 正在查看競賽詳情...');
+            alert(isEnglish ? '🏆 Loading competition info...' : '🏆 正在加載競賽信息...');
         }
 
-        function vote(candidate) {
-            alert(isEnglish ? 
-                `🗳️ Voting for Candidate ${candidate}...\n\nYour vote has been recorded on-chain!` :
-                `🗳️正在為候選作品${candidate}投票...\n\n您的投票已記錄在鏈上!`);
+        function openTools() {
+            alert(isEnglish ? '🎨 Launching AI creation tools...' : '🎨 正在啟動AI創作工具...');
         }
 
-        function viewAllProposals() {
-            alert(isEnglish ? '🗳️ Viewing all candidate works...' : '🗳️ 正在查看所有候選作品...');
+        function viewProposals() {
+            alert(isEnglish ? '🗳️ Loading governance proposals...' : '🗳️正在加載治理提案...');
         }
 
-        function viewTransactions() {
-            alert(isEnglish ? '💎 Viewing transaction history...' : '💎 正在查看交易記錄...');
+        function voteJury() {
+            alert(isEnglish ? '👥 Opening jury election...' : '👥 正在打開評審團選舉...');
         }
 
-        function goToAIFMarket() {
-            alert(isEnglish ? '🚀 Opening AIF Market...' : '🚀 正在打開AIF市場...');
+        function viewIPPool() {
+            alert(isEnglish ? '💎 Exploring IP investment pool...' : '💎 正在探索IP投資池...');
         }
 
-        function viewJuryElection() {
-            alert(isEnglish ? '👥 Viewing jury election...' : '👥 正在查看評審團選舉...');
+        function viewActivity() {
+            alert(isEnglish ? '📊 Loading activity history...' : '📊 正在加載活動歷史...');
         }
-
-        function enterChamber() {
-            alert(isEnglish ? '📺 Entering The Chamber...' : '📺 正在進入議事視圖...');
-        }
-
-        function openSettings() {
-            alert(isEnglish ? '⚙️ Opening settings...' : '⚙️ 正在打開設置...');
-        }
-
-        function openHelp() {
-            alert(isEnglish ? '❓ Opening help center...' : '❓ 正在打開幫助中心...');
-        }
-
-        // 搜索功能
-        document.getElementById('curatorSearch').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                const query = this.value;
-                alert(isEnglish ? 
-                    `🤖 AI Curator is searching for: "${query}"...` :
-                    `🤖 AI策展人正在搜索: "${query}"...`);
-            }
-        });
 
         // 初始化
-        console.log('HKAIIFF User Center Loaded ✅');
+        console.log('User Center initialized successfully');
     </script>
 </body>
 </html>
