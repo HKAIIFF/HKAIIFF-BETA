@@ -3749,7 +3749,7 @@
 
     <!-- ========== 指紋授權層 ========== -->
     <div id="fingerprint-layer">
-        <div class="fingerprint-button" onclick="startDataCollection()">
+        <div class="fingerprint-button" id="fingerprint-button">
             <svg class="fingerprint-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" stroke="#00ff9d"/>
             </svg>
@@ -3912,18 +3912,11 @@
         let isInteractionLocked = false; // 防止點擊指紋後再次觸發
         const mainContent = document.getElementById('main-content');
         const fingerprintLayer = document.getElementById('fingerprint-layer');
+        const fingerprintButton = document.getElementById('fingerprint-button');
 
         // 顯示正常內容(用戶活動時)
-        function showNormalContent(event) {
+        function showNormalContent() {
             if (isInteractionLocked) return; // 如果已經進入數據收集,不再響應
-            
-            // 如果觸摸事件來自指紋圖標或其子元素,不執行隱藏
-            if (event && event.target) {
-                const fingerprintIcon = document.querySelector('.fingerprint-icon');
-                if (fingerprintIcon && (fingerprintIcon.contains(event.target) || event.target === fingerprintIcon)) {
-                    return; // 不執行隱藏,讓點擊事件正常觸發
-                }
-            }
             
             clearTimeout(inactivityTimer);
             
@@ -3946,12 +3939,41 @@
             fingerprintLayer.classList.add('show');
         }
 
-        // 監聽所有用戶活動事件
-        document.addEventListener('mousemove', showNormalContent);
-        document.addEventListener('touchstart', showNormalContent);
-        document.addEventListener('touchmove', showNormalContent);
-        document.addEventListener('scroll', showNormalContent);
-        document.addEventListener('keydown', showNormalContent);
+        // 監聽所有用戶活動事件 - 使用捕獲階段並過濾指紋按鈕
+        function handleUserActivity(event) {
+            // 如果事件目標是指紋按鈕或其子元素,不處理
+            if (fingerprintButton && (fingerprintButton.contains(event.target) || event.target === fingerprintButton)) {
+                return;
+            }
+            showNormalContent();
+        }
+
+        // 使用捕獲階段監聽,優先級更高
+        document.addEventListener('mousemove', handleUserActivity, true);
+        document.addEventListener('touchstart', handleUserActivity, true);
+        document.addEventListener('touchmove', handleUserActivity, true);
+        document.addEventListener('scroll', handleUserActivity, true);
+        document.addEventListener('keydown', handleUserActivity, true);
+
+        // 指紋按鈕事件處理 - 使用多種事件確保兼容性
+        if (fingerprintButton) {
+            // 阻止指紋按鈕上的事件冒泡
+            fingerprintButton.addEventListener('touchstart', function(e) {
+                e.stopPropagation();
+            }, true);
+            
+            fingerprintButton.addEventListener('touchend', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                startDataCollection();
+            }, true);
+            
+            fingerprintButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                startDataCollection();
+            }, true);
+        }
 
         // 頁面加載時啟動
         window.addEventListener('load', () => {
