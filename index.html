@@ -1095,6 +1095,120 @@
             box-shadow: 0 15px 50px rgba(255, 215, 0, 0.6);
         }
 
+        /* 全屏視頻播放器 */
+        #video-player-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10005;
+            flex-direction: column;
+        }
+
+        #video-player-overlay.show {
+            display: flex;
+        }
+
+        #video-player-overlay video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* 視頻關閉按鈕 */
+        .video-close-button {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #fff;
+            transition: all 0.3s ease;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+        }
+
+        .video-close-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .video-close-button::before {
+            content: '✕';
+            font-weight: bold;
+        }
+
+        .video-next-button {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border: 3px solid var(--accent);
+            border-radius: 50px;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.5s ease;
+            animation: buttonGlow 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .video-next-button.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .video-next-button:hover {
+            transform: translateX(-50%) translateY(-10px) scale(1.1);
+            box-shadow: 0 20px 50px rgba(0, 255, 157, 0.6);
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(0, 255, 157, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(0, 255, 157, 0.8), 0 0 60px rgba(52, 152, 219, 0.6);
+            }
+        }
+
+        /* 移動端優化 */
+        @media (max-width: 768px) {
+            .video-close-button {
+                width: 50px;
+                height: 50px;
+                top: 20px;
+                right: 20px;
+                font-size: 1.5rem;
+            }
+
+            .video-next-button {
+                bottom: 30px;
+                padding: 15px 40px;
+                font-size: 1.2rem;
+            }
+        }
+
         /* 移動端優化 */
         @media (max-width: 768px) {
             .fingerprint-button {
@@ -3903,6 +4017,22 @@
         </div>
     </div>
 
+    <!-- ========== 全屏視頻播放器 ========== -->
+    <div id="video-player-overlay">
+        <!-- 關閉按鈕 -->
+        <button class="video-close-button" onclick="closeVideoPlayer()" title="關閉視頻 / Close Video"></button>
+        
+        <video id="magic-video" loop>
+            <source src="aif.MP4" type="video/mp4">
+            您的瀏覽器不支持視頻播放。
+        </video>
+        
+        <button class="video-next-button" id="video-next-btn" onclick="goToIdentityPage()">
+            <span class="lang-zh">✨ 進入下一頁</span>
+            <span class="lang-en active">✨ Next Page</span>
+        </button>
+    </div>
+
     <!-- ========== 互動層JavaScript ========== -->
     <script>
         // ============================================
@@ -4103,17 +4233,81 @@
         }
 
         // ============================================
-        // 進入哈利波特世界
+        // 進入哈利波特世界 - 播放視頻
         // ============================================
         function enterHarryPotterWorld() {
-            const isZh = document.body.classList.contains('zh-active');
-            const msg = isZh ? 
-                '🎬 歡迎來到《哈利波特》世界!\n\n這裡是您魔法之旅的起點...\n\n(在完整版本中,這裡將跳轉到實際的互動世界)' :
-                '🎬 Welcome to the Harry Potter World!\n\nThis is where your magical journey begins...\n\n(In the full version, this will redirect to the actual interactive world)';
-            alert(msg);
+            console.log('進入魔法世界 - 開始播放視頻');
             
-            // 可以在這裡添加實際跳轉邏輯
-            // window.location.href = 'harry-potter-world.html';
+            // 隱藏哈利波特介紹頁面
+            document.getElementById('harry-potter-page').classList.remove('show');
+            
+            // 顯示視頻播放器
+            const videoOverlay = document.getElementById('video-player-overlay');
+            const video = document.getElementById('magic-video');
+            const nextButton = document.getElementById('video-next-btn');
+            
+            // 重置按鈕狀態
+            nextButton.classList.remove('show');
+            
+            videoOverlay.classList.add('show');
+            
+            // 從頭開始播放視頻
+            video.currentTime = 0;
+            video.play().then(() => {
+                console.log('視頻開始播放');
+            }).catch(err => {
+                console.error('視頻播放失敗:', err);
+                alert('視頻播放失敗,請確保 aif.MP4 文件存在');
+            });
+            
+            // 監聽視頻播放完第一次後顯示按鈕
+            let hasPlayedOnce = false;
+            const onVideoEnded = function() {
+                if (!hasPlayedOnce) {
+                    console.log('視頻播放完第一次,顯示下一頁按鈕');
+                    nextButton.classList.add('show');
+                    hasPlayedOnce = true;
+                }
+            };
+            
+            // 移除舊的監聽器(如果有)
+            video.removeEventListener('ended', onVideoEnded);
+            // 添加新的監聽器
+            video.addEventListener('ended', onVideoEnded);
+        }
+
+        // ============================================
+        // 關閉視頻播放器
+        // ============================================
+        function closeVideoPlayer() {
+            console.log('關閉視頻播放器,返回哈利波特世界頁面');
+            
+            const videoOverlay = document.getElementById('video-player-overlay');
+            const video = document.getElementById('magic-video');
+            const harryPotterPage = document.getElementById('harry-potter-page');
+            const nextButton = document.getElementById('video-next-btn');
+            
+            // 暫停視頻
+            video.pause();
+            console.log('視頻已暫停');
+            
+            // 隱藏視頻播放器
+            videoOverlay.classList.remove('show');
+            
+            // 隱藏下一頁按鈕
+            nextButton.classList.remove('show');
+            
+            // 重新顯示哈利波特世界頁面
+            harryPotterPage.classList.add('show');
+            console.log('返回哈利波特世界頁面');
+        }
+
+        // ============================================
+        // 跳轉到身份頁
+        // ============================================
+        function goToIdentityPage() {
+            console.log('跳轉到身份頁');
+            window.location.href = '身份頁.html';
         }
 
         // ============================================
